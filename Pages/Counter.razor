@@ -1,0 +1,106 @@
+﻿@page "/counter"
+
+<h1>Game of Life</h1> 
+<hr>
+@{
+    //only first time (init pattern)
+    if(currentCount==0) {
+        e.put_pattern(6,6, "pentadecathlon");
+        e.put_pattern(15,15, "pentadecathlon");
+
+        @* Console.WriteLine("hello 100"); *@
+    }
+}
+<table class="environment">
+    @for(var i=0; i<@e.total_of_rows(); i++) {
+        <tr>
+            @for(var j=0; j<@e.total_of_cols(); j++) {
+                @if(e.biounit(i,j)!=null) {
+                    <td class="cell" style="background-color:@e.biounit(i,j).myColor()"></td>
+                }
+                else{
+                    <td class="cell dead"></td>
+                }
+            }
+        </tr>
+    }
+</table>
+<hr>
+<p>
+    <input type="radio" name="myradiobtn"
+        checked="@(theRadio.Equals("step"))"
+        value="step"
+        @onchange="ClickRadio"/> Step by step
+    <input type="radio" name="myradiobtn"
+        checked="@(theRadio.Equals("many"))"
+        value="many"
+        @onchange="ClickRadio"/> Several steps
+</p>
+
+<div>
+
+</div>
+
+<div style="display: @(theRadio.Equals("many")?"":"none")">
+    <h5>Cycles specifications</h5>
+    Number of Cycles:
+    <input @bind="cyclesPerTime" /> (internal value: @cyclesPerTime)
+    <hr>
+
+    <div>
+         <form action="_blank">
+        <label for="selectedCycle">Select a Cycle:</label>
+        <select @bind="selectedCycle" id="selectedCycle">
+            <option value="first">First</option>
+            <option value="second">Second</option>
+            <option value="third">Third</option>
+            <option value="fourth">Fourth</option>
+        </select>
+
+        <div style="display: @(selectedCycle.Equals("first")
+        || selectedCycle.Equals("second")
+        || selectedCycle.Equals("third")
+        || selectedCycle.Equals("fourth") ?"":"none")">
+            (You selected @selectedCycle cycle)
+        </div>
+    </form>
+    <hr>
+    <input type="submit" value="Submit">
+    <hr>
+</div>
+</div>
+
+
+
+<button class="btn btn-primary" @onclick="IncrementCount"> Next</button>
+<a
+    class="btn btn-primary"
+    href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life"\
+    target="_blank">
+    Look for Patterns in Wikipedia
+ </a>
+
+@code {
+    private string selectedCycle = "" ;
+    private int cyclesPerTime = 0;
+    private int currentCount = 0;
+    private Data.Environment e = new Data.Environment(30,30);
+    private string theRadio = "";
+    private Data.BioUnit u;
+    private void ClickRadio(ChangeEventArgs args) {
+        theRadio = args.Value.ToString();
+        @* e.nextConwayStep(); *@
+        currentCount++;
+    }
+    private void IncrementCount()
+    {
+        currentCount++;
+        e.nextConwayStep();
+        
+    }
+
+    private void AddPattern()
+    {
+        Console.WriteLine("Add the pattern pentadecathlon");
+    }
+}
