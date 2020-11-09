@@ -5,26 +5,35 @@
 @{
     //only first time (init pattern)
     if(currentCount==0) {
-        e.put_pattern(6,6, "pentadecathlon");
-        e.put_pattern(15,15, "pentadecathlon");
-
-        @* Console.WriteLine("hello 100"); *@
+        e.put_pattern(6,6,"pentadecathlon");
     }
+    int svgh = e.total_of_rows()*9+2;
+    int svgw = e.total_of_cols()*9+2;
 }
-<table class="environment">
+
+<svg height="@svgh" width="@svgw">
+    <defs>
+        <filter id="myBlur" x="0" y="0">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+        </filter>
+    </defs>
     @for(var i=0; i<@e.total_of_rows(); i++) {
-        <tr>
-            @for(var j=0; j<@e.total_of_cols(); j++) {
-                @if(e.biounit(i,j)!=null) {
-                    <td class="cell" style="background-color:@e.biounit(i,j).myColor()"></td>
-                }
-                else{
-                    <td class="cell dead"></td>
-                }
+        @for(var j=0; j<@e.total_of_cols(); j++) {
+            int cy = (i*9+4+1);
+            int cx = (j*9+4+1);
+            int idx = i;
+            int jdx = j;
+            @if(e.biounit(i,j)!=null) {
+                <circle cx="@cx" cy="@cy" r="4" fill="#90FA90"
+                filter="url(#myBlur)" @onclick="()=>CellClick(idx, jdx)" />
             }
-        </tr>
+            else {
+                <circle cx="@cx" cy="@cy" r="4" fill="#909090"
+                filter="url(#myBlur)" @onclick="()=>CellClick(idx, jdx)" />
+            }
+        }
     }
-</table>
+</svg>
 <hr>
 <p>
     <input type="radio" name="myradiobtn"
@@ -37,10 +46,6 @@
         @onchange="ClickRadio"/> Several steps
 </p>
 
-<div>
-
-</div>
-
 <div style="display: @(theRadio.Equals("many")?"":"none")">
     <h5>Cycles specifications</h5>
     Number of Cycles:
@@ -48,7 +53,7 @@
     <hr>
 
     <div>
-         <form action="_blank">
+        <form action="_blank">
         <label for="selectedCycle">Select a Cycle:</label>
         <select @bind="selectedCycle" id="selectedCycle">
             <option value="first">First</option>
@@ -61,17 +66,55 @@
         || selectedCycle.Equals("second")
         || selectedCycle.Equals("third")
         || selectedCycle.Equals("fourth") ?"":"none")">
-            (You selected @selectedCycle cycle)
+        (You selected @selectedCycle cycle)
         </div>
+        </form>
+        <hr>
+        <input type="submit" value="Submit">
+        <hr>
+    </div>
+</div>
+
+<button class="btn btn-primary" @onclick="o => this.isOpen = !this.isOpen">
+@(this.isOpen ? "Add Pattern..." : "Add Pattern (-)")
+</button>
+@if(!isOpen){
+    @PatternsList[0];
+    <hr>
+    @PatternsList[1];
+    <hr>
+    @PatternsList[2];
+    <hr>
+}
+
+<div style="display: @(isOpen.Equals(false)?"":"none")">
+    <form method="post" action="AddPattern">
+        <label for="selectedPattern">Select Pattern Type:</label>
+        <select @bind="selectedPattern" id="selectedPattern">
+            <option value="aforall">A for All</option>
+            <option value="bipole">Bipole</option>
+            <option value="pentadecathlon">Pentadecathlon</option>
+        </select>
     </form>
+    row
+    <input @bind="rowNumber" /> (internal value: @rowNumber)
+    column
+    <input @bind="columnNumber" /> (internal value: @columnNumber)
+    <button class="btn btn-success" @onclick="AddPattern"> Add</button>
+    
     <hr>
-    <input type="submit" value="Submit">
-    <hr>
+    <button class="btn btn-primary" @onclick="o => this.isCollapsed = !this.isCollapsed">
+@(this.isCollapsed ? "Add Cells..." : "Add Cells (-)")
+</button>
+
+<div style="display: @(isCollapsed.Equals(false)?"":"none")">
+    
+    <textarea rows="" cols="" @bind="@cells"></textarea>
+    <input type="submit" class="btn btn-primary" value="Add" @onclick="NewCell">
 </div>
 </div>
 
-
-
+<hr>
 <button class="btn btn-primary" @onclick="IncrementCount"> Next</button>
 <a
     class="btn btn-primary"
@@ -82,10 +125,22 @@
 
 @code {
     private string selectedCycle = "" ;
+    private string selectedPattern = "";
     private int cyclesPerTime = 0;
     private int currentCount = 0;
     private Data.Environment e = new Data.Environment(30,30);
     private string theRadio = "";
+    private bool isCollapsed = true;
+    private bool isOpen = true;
+    private string cells = "";
+    public string[] PatternsList = new string[] {
+        "Add the pattern A for All",
+        "Add the pattern Bipole",
+        "Add the pattern Pentadecathlon"
+    };
+    private int rowNumber = 0;
+    private int columnNumber = 0;
+
     private Data.BioUnit u;
     private void ClickRadio(ChangeEventArgs args) {
         theRadio = args.Value.ToString();
@@ -98,9 +153,35 @@
         e.nextConwayStep();
         
     }
-
     private void AddPattern()
     {
-        Console.WriteLine("Add the pattern pentadecathlon");
+        if(selectedPattern == "aforall") {
+            e.put_pattern(rowNumber, columnNumber,"aforall");
+        }
+        else if (selectedPattern == "bipole") {
+            e.put_pattern(rowNumber, columnNumber,"bipole");
+        }
+        else if (selectedPattern == "pentadecathlon") {
+            e.put_pattern(rowNumber, columnNumber,"pentadecathlon");
+        }
+    }
+    private void NewCell() {
+        int counter = 0;
+        string[] cellList = cells.Split(new Char[] { ',', '\n' });
+
+        while (counter < cellList.Length)
+        {
+            this.rowNumber = Int32.Parse(cellList[counter]);
+            counter++;
+
+            this.columnNumber = Int32.Parse(cellList[counter]);
+            counter++;
+
+            e.insert(rowNumber, columnNumber, new Data.BioUnit(rowNumber, columnNumber, e));
+        }
+    }
+    private bool CellClick(int row, int col) {
+        e.onOff(row, col);
+        return true;
     }
 }

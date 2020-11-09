@@ -154,6 +154,51 @@ namespace blazorserver01.Data
                     this.insert(x+i, y+j, new BioUnit(x+1, y+j, this));
                 }
             }
+            if (pattern.Equals("bipole")) {
+                for (int i = 0; i < 2; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if ((i == 0 && j > 2) || ((i == 1) && ((j != 0) && (j % 2 == 0))))
+                        {
+                            this.insert(x + i, y + j, new BioUnit(x + i, y + j, this));
+                            this.insert(x + 4 - i, y + 4 - j, new BioUnit(x + 4 - i, y + 4 - j, this));
+                        }
+                    }
+                }
+            }
+            if(pattern.Equals("aforall")) {
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if ((i == 0 && j == 4) || (i==1&&j==3)||(i==2&&j>2)||((i==3)&&((j==1)||(j==3)))|| (i == 4 && j == 0))
+                        {
+                            this.insert(x + i, y + j, new BioUnit(x + i, y + j, this));
+                            this.insert(x + 9 - i, y + 9 - j, new BioUnit(x + 9 - i, y + 9 - j, this));
+                            this.insert(x + 9 - i, y + j, new BioUnit(x + 9 - i, y + j, this));
+                            this.insert(x + i, y + 9 - j, new BioUnit(x + i, y + 9 - j, this));
+                        }
+                    }
+                }
+            }
+        }
+        public void add_cell (int x, int y) {
+            for (int i = 0; i < 31; i++) {
+                for (int j = 0; i < 31; j++ ) {
+                    this.insert(x + i, y + j, new BioUnit(x + i, y + j, this));
+                }
+            }
+        }
+        public void onOff(int row, int col) {
+            if (this.rightPos(row, col)) {
+                if(this.cell[row,col]!=null) {
+                    this.cell[row,col]=null;
+                }
+                else {
+                    this.cell[row,col] = new BioUnit(row, col, this);
+                }
+            }
         }
     }
 }

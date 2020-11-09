@@ -78,39 +78,6 @@
         }
       },
       {
-        "HashCode": -535160095,
-        "Kind": "Components.Component",
-        "Name": "blazorserver01.Pages.Index",
-        "AssemblyName": "blazorserver01",
-        "CaseSensitive": true,
-        "TagMatchingRules": [
-          {
-            "TagName": "Index"
-          }
-        ],
-        "Metadata": {
-          "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "blazorserver01.Pages.Index"
-        }
-      },
-      {
-        "HashCode": -191280479,
-        "Kind": "Components.Component",
-        "Name": "blazorserver01.Pages.Index",
-        "AssemblyName": "blazorserver01",
-        "CaseSensitive": true,
-        "TagMatchingRules": [
-          {
-            "TagName": "blazorserver01.Pages.Index"
-          }
-        ],
-        "Metadata": {
-          "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "blazorserver01.Pages.Index",
-          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
-        }
-      },
-      {
         "HashCode": 1722407956,
         "Kind": "Components.Component",
         "Name": "blazorserver01.Pages.RabbitsAndCarrots",
@@ -140,6 +107,39 @@
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
           "Common.TypeName": "blazorserver01.Pages.RabbitsAndCarrots",
+          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
+        }
+      },
+      {
+        "HashCode": -535160095,
+        "Kind": "Components.Component",
+        "Name": "blazorserver01.Pages.Index",
+        "AssemblyName": "blazorserver01",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "Index"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "blazorserver01.Pages.Index"
+        }
+      },
+      {
+        "HashCode": -191280479,
+        "Kind": "Components.Component",
+        "Name": "blazorserver01.Pages.Index",
+        "AssemblyName": "blazorserver01",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "blazorserver01.Pages.Index"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "blazorserver01.Pages.Index",
           "Components.NameMatch": "Components.FullyQualifiedNameMatch"
         }
       },
